@@ -54,17 +54,18 @@ import static java.util.Collections.unmodifiableList;
                 ),
                 additionalPrinterColumns = {
                         @Crd.Spec.AdditionalPrinterColumn(
-                                name = "Desired replicas",
-                                description = "The desired number of Kafka Bridge replicas",
-                                jsonPath = ".spec.replicas",
-                                type = "integer"
+                                name = "Channel",
+                                description = "The channel to post the message",
+                                jsonPath = ".spec.channel",
+                                type = "string",
+                                priority = 5
                         ),
                         @Crd.Spec.AdditionalPrinterColumn(
-                                name = "Bootstrap Servers",
-                                description = "The boostrap servers",
-                                jsonPath = ".spec.bootstrapServers",
+                                name = "Text",
+                                description = "The text to post",
+                                jsonPath = ".spec.text",
                                 type = "string",
-                                priority = 1
+                                priority = 10
                         )
                 }
         )

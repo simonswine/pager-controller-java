@@ -20,15 +20,16 @@ spec:
     shortNames:
     - msg
   additionalPrinterColumns:
-  - name: Desired replicas
-    description: The desired number of Kafka Bridge replicas
-    JSONPath: .spec.replicas
-    type: integer
-  - name: Bootstrap Servers
-    description: The boostrap servers
-    JSONPath: .spec.bootstrapServers
+  - name: Channel
+    description: The channel to post the message
+    JSONPath: .spec.channel
     type: string
-    priority: 1
+    priority: 5
+  - name: Text
+    description: The text to post
+    JSONPath: .spec.text
+    type: string
+    priority: 10
   subresources:
     status: {}
   validation:
@@ -37,9 +38,10 @@ spec:
         spec:
           type: object
           properties:
-            replicas:
-              type: integer
-              minimum: 0
+            channel:
+              type: string
+            text:
+              type: string
         status:
           type: object
           properties:

@@ -7,11 +7,13 @@ package dev.swine.kubernetes.pagercontroller.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.strimzi.crdgenerator.annotations.Description;
+import io.strimzi.crdgenerator.annotations.OneOf;
 import io.strimzi.crdgenerator.annotations.Minimum;
 import io.sundr.builder.annotations.Buildable;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
+
 
 @Buildable(
         editableEnabled = false,
@@ -28,15 +30,23 @@ public class MessageSpec implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private int replicas;
+    private String text;
+    private String channel;
 
-    @Description("The number of pods in the `Deployment`.")
-    @Minimum(0)
-    public int getReplicas() {
-        return replicas;
+    @Description("Text defins the message to be sent")
+    public String getText() {
+        return this.text;
     }
 
-    public void setReplicas(int replicas) {
-        this.replicas = replicas;
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    @Description("Channel contains the tlk.io channel to be used")
+    public String getChannel() {
+        return this.channel;
+    }
+    public void setChannel(String channel) {
+        this.channel = channel;
     }
 }

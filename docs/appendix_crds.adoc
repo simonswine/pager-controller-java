@@ -22,9 +22,11 @@ Used in: xref:type-Message-{context}[`Message`]
 
 [options="header"]
 |====
-|Property         |Description
-|replicas  1.2+<.<|The number of pods in the `Deployment`.
-|integer
+|Property        |Description
+|channel  1.2+<.<|Channel contains the tlk.io channel to be used.
+|string
+|text     1.2+<.<|Text defins the message to be sent.
+|string
 |====
 
 [id='type-MessageStatus-{context}']

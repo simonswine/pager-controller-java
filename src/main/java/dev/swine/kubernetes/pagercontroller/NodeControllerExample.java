@@ -36,8 +36,8 @@ import okhttp3.OkHttpClient;
 
 import java.io.FileReader;
 
-public class ControllerExample {
-    private static final Logger log = LoggerFactory.getLogger(ControllerExample.class);
+public class NodeControllerExample {
+    private static final Logger log = LoggerFactory.getLogger(NodeControllerExample.class);
 
 
     public static void main(String[] args) throws IOException, ApiException {
@@ -113,13 +113,14 @@ public class ControllerExample {
                         .addController(controller)
                         .build();
 
+        // build a unique identity based on hostname + UUID
         String identity =  InetAddress.getLocalHost().getHostName() + "-" + UUID.randomUUID();
 
         LeaderElectingController leaderElectingController =
                 new LeaderElectingController(
                         new LeaderElector(
                                 new LeaderElectionConfig(
-                                        new EndpointsLock("kube-system", "pager-controller-leader-election", identity),
+                                        new EndpointsLock("kube-system", "node-controller-example-leader-election", identity),
                                         Duration.ofMillis(10000),
                                         Duration.ofMillis(8000),
                                         Duration.ofMillis(5000))),
