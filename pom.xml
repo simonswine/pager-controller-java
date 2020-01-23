@@ -5,12 +5,20 @@
     <artifactId>pager-controller-java</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <repositories>
+        <repository>
+            <id>repo</id>
+            <url>file://${basedir}/repo</url>
+        </repository>
+    </repositories>
+
+
     <properties>
         <java.version>1.8</java.version>
         <kubernetes-client.version>7.0.0</kubernetes-client.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <fabric8.version>4.6.4</fabric8.version>
+        <fabric8.version>4.7.0</fabric8.version>
         <strimzi.version>0.16.0</strimzi.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -43,28 +51,25 @@
             <version>${strimzi.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.25</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.25</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+        <dependency>
             <groupId>io.strimzi</groupId>
             <artifactId>crd-annotations</artifactId>
             <version>${strimzi.version}</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/bundled_jar/crd-annotations-0.16.0.jar</systemPath>
         </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.5</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.6.4</version>
-        </dependency>
-        <!--<dependency>
-            <groupId>io.strimzi</groupId>
-            <artifactId>crd-annotations</artifactId>
-            <version>${project.version}</version>
-            <scope>compile</scope>
-        </dependency>-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -90,7 +95,7 @@
                             <executable>java</executable>
                             <arguments>
                                 <argument>-classpath</argument>
-                                <argument>${pom.basedir}${file.separator}target${file.separator}classes${path.separator}${project.basedir}/bundled_jar/crd-generator-0.16.0.jar</argument>
+                                <argument>${pom.basedir}${file.separator}target${file.separator}classes${path.separator}${project.basedir}/repo/io/strimzi/crd-generator/0.16.0/crd-generator-0.16.0.jar</argument>
                                 <argument>io.strimzi.crdgenerator.CrdGenerator</argument>
                                 <argument>--label</argument><argument>app:strimzi</argument>
                                 <argument>--yaml</argument>
@@ -108,7 +113,7 @@
                             <executable>java</executable>
                             <arguments>
                                 <argument>-classpath</argument>
-                                <argument>${pom.basedir}${file.separator}target${file.separator}classes${path.separator}${project.basedir}/bundled_jar/crd-generator-0.16.0.jar</argument>
+                                <argument>${pom.basedir}${file.separator}target${file.separator}classes${path.separator}${project.basedir}/repo/io/strimzi/crd-generator/0.16.0/crd-generator-0.16.0.jar</argument>
                                 <argument>io.strimzi.crdgenerator.DocGenerator</argument>
                                 <argument>--linker</argument>
                                 <argument>io.strimzi.crdgenerator.KubeLinker</argument>
@@ -124,14 +129,27 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>test-jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <version>3.2.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>dev.swine.kubernetes.pagercontroller.MessageController</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>dev.swine.kubernetes.pagercontroller.MessageController</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
             </plugin>
         </plugins>
     </build>
