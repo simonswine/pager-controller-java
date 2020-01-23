@@ -10,6 +10,8 @@
         <kubernetes-client.version>7.0.0</kubernetes-client.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
+        <fabric8.version>4.6.4</fabric8.version>
+        <strimzi.version>0.16.0</strimzi.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -25,5 +27,112 @@
             <artifactId>client-java-extended</artifactId>
             <version>${kubernetes-client.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.fabric8</groupId>
+            <artifactId>kubernetes-client</artifactId>
+            <version>${fabric8.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.fabric8</groupId>
+            <artifactId>kubernetes-model</artifactId>
+            <version>${fabric8.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.strimzi</groupId>
+            <artifactId>crd-generator</artifactId>
+            <version>${strimzi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.strimzi</groupId>
+            <artifactId>crd-annotations</artifactId>
+            <version>${strimzi.version}</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/bundled_jar/crd-annotations-0.16.0.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.6.4</version>
+        </dependency>
+        <!--<dependency>
+            <groupId>io.strimzi</groupId>
+            <artifactId>crd-annotations</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.10</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-crd-co-install</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>java</executable>
+                            <arguments>
+                                <argument>-classpath</argument>
+                                <argument>${pom.basedir}${file.separator}target${file.separator}classes${path.separator}${project.basedir}/bundled_jar/crd-generator-0.16.0.jar</argument>
+                                <argument>io.strimzi.crdgenerator.CrdGenerator</argument>
+                                <argument>--label</argument><argument>app:strimzi</argument>
+                                <argument>--yaml</argument>
+                                <argument>dev.swine.kubernetes.pagercontroller.model.Message=${pom.basedir}${file.separator}crds${file.separator}message-crd.yaml</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>generate-doc</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>java</executable>
+                            <arguments>
+                                <argument>-classpath</argument>
+                                <argument>${pom.basedir}${file.separator}target${file.separator}classes${path.separator}${project.basedir}/bundled_jar/crd-generator-0.16.0.jar</argument>
+                                <argument>io.strimzi.crdgenerator.DocGenerator</argument>
+                                <argument>--linker</argument>
+                                <argument>io.strimzi.crdgenerator.KubeLinker</argument>
+                                <argument>https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/</argument>
+                                <argument>appendix_crds.adoc</argument>
+                                <argument>dev.swine.kubernetes.pagercontroller.model.Message</argument>
+                            </arguments>
+                            <workingDirectory>${pom.basedir}${file.separator}docs</workingDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
