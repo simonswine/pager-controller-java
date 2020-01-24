@@ -22,9 +22,7 @@ import java.io.Serializable;
 )
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "replicas", "image", "bootstrapServers", "tls", "authentication", "http", "consumer",
-        "producer", "resources", "jvmOptions", "logging",
-        "metrics", "livenessProbe", "readinessProbe", "template", "tracing"})
+        "channel", "text", "state"})
 @EqualsAndHashCode
 public class MessageSpec implements Serializable {
 
@@ -32,8 +30,9 @@ public class MessageSpec implements Serializable {
 
     private String text;
     private String channel;
+    private MessageState state;
 
-    @Description("Text defins the message to be sent")
+    @Description("Text defines the message to be sent")
     public String getText() {
         return this.text;
     }
@@ -48,5 +47,13 @@ public class MessageSpec implements Serializable {
     }
     public void setChannel(String channel) {
         this.channel = channel;
+    }
+
+    @Description("State contains if the message has been sent or not")
+    public MessageState getState() {
+        return this.state;
+    }
+    public void setState(MessageState state) {
+        this.state = state;
     }
 }

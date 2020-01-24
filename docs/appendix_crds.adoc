@@ -8,9 +8,9 @@
 [options="header"]
 |====
 |Property       |Description
-|spec    1.2+<.<|The specification of the Kafka Bridge.
+|spec    1.2+<.<|The specification of the Message.
 |xref:type-MessageSpec-{context}[`MessageSpec`]
-|status  1.2+<.<|The status of the Kafka Bridge.
+|status  1.2+<.<|The status of the Message.
 |xref:type-MessageStatus-{context}[`MessageStatus`]
 |====
 
@@ -25,8 +25,10 @@ Used in: xref:type-Message-{context}[`Message`]
 |Property        |Description
 |channel  1.2+<.<|Channel contains the tlk.io channel to be used.
 |string
-|text     1.2+<.<|Text defins the message to be sent.
+|text     1.2+<.<|Text defines the message to be sent.
 |string
+|state    1.2+<.<|State contains if the message has been sent or not.
+|string (one of [New, Sent])
 |====
 
 [id='type-MessageStatus-{context}']
@@ -38,9 +40,9 @@ Used in: xref:type-Message-{context}[`Message`]
 [options="header"]
 |====
 |Property                   |Description
+|errorCount          1.2+<.<|The amount of errors occured.
+|integer
 |observedGeneration  1.2+<.<|The generation of the CRD that was last reconciled by the operator.
 |integer
-|url                 1.2+<.<|The URL at which external client applications can access the Kafka Bridge.
-|string
 |====
 

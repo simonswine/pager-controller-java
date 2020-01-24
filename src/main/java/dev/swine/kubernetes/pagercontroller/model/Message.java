@@ -4,7 +4,6 @@
  */
 package dev.swine.kubernetes.pagercontroller.model;
 
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -24,11 +23,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-// TODO: import static io.strimzi.api.kafka.Crds.STRIMZI_CATEGORY;
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyMap;
-import static java.util.Collections.singletonList;
-import static java.util.Collections.unmodifiableList;
+import static java.util.Collections.*;
 
 @JsonDeserialize
 @Crd(
@@ -49,23 +45,21 @@ import static java.util.Collections.unmodifiableList;
                                 storage = true
                         )
                 },
-                subresources = @Crd.Spec.Subresources(
-                        status = @Crd.Spec.Subresources.Status()
-                ),
+                //               subresources = @Crd.Spec.Subresources(
+                //                     status = @Crd.Spec.Subresources.Status()
+                //           ),
                 additionalPrinterColumns = {
                         @Crd.Spec.AdditionalPrinterColumn(
                                 name = "Channel",
                                 description = "The channel to post the message",
                                 jsonPath = ".spec.channel",
-                                type = "string",
-                                priority = 5
+                                type = "string"
                         ),
                         @Crd.Spec.AdditionalPrinterColumn(
-                                name = "Text",
-                                description = "The text to post",
-                                jsonPath = ".spec.text",
-                                type = "string",
-                                priority = 10
+                                name = "State",
+                                description = "State of the message",
+                                jsonPath = ".spec.state",
+                                type = "string"
                         )
                 }
         )
@@ -98,7 +92,6 @@ public class Message extends CustomResource implements UnknownPropertyPreserving
     public static final List<String> RESOURCE_SHORTNAMES = singletonList(SHORT_NAME);
 
     private String apiVersion;
-    private ObjectMeta metadata;
     private MessageSpec spec;
     private MessageStatus status;
     private Map<String, Object> additionalProperties = new HashMap<>(0);
@@ -123,7 +116,7 @@ public class Message extends CustomResource implements UnknownPropertyPreserving
         super.setMetadata(metadata);
     }
 
-    @Description("The specification of the Kafka Bridge.")
+    @Description("The specification of the Message.")
     public MessageSpec getSpec() {
         return spec;
     }
@@ -132,8 +125,7 @@ public class Message extends CustomResource implements UnknownPropertyPreserving
         this.spec = spec;
     }
 
-    @Override
-    @Description("The status of the Kafka Bridge.")
+    @Description("The status of the Message.")
     public MessageStatus getStatus() {
         return status;
     }

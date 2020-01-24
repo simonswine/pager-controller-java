@@ -11,28 +11,23 @@ import io.strimzi.crdgenerator.annotations.Description;
 import io.sundr.builder.annotations.Buildable;
 import lombok.EqualsAndHashCode;
 
-/**
- * Represents a status of the Kafka Bridge resource
- */
 @Buildable(
         editableEnabled = false,
-        generateBuilderPackage = false,
         builderPackage = "io.fabric8.kubernetes.api.builder"
 )
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "conditions", "observedGeneration", "url" })
 @EqualsAndHashCode
 public class MessageStatus extends Status {
     private static final long serialVersionUID = 1L;
 
-    private String url;
+    private int errorCount;
 
-    @Description("The URL at which external client applications can access the Kafka Bridge.")
-    public String getUrl() {
-        return url;
+    @Description("The amount of errors occured.")
+    public int getErrorCount() {
+        return this.errorCount;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setErrorCount(int errorCount) {
+        this.errorCount = errorCount;
     }
 }

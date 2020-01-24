@@ -24,14 +24,10 @@ spec:
     description: The channel to post the message
     JSONPath: .spec.channel
     type: string
-    priority: 5
-  - name: Text
-    description: The text to post
-    JSONPath: .spec.text
+  - name: State
+    description: State of the message
+    JSONPath: .spec.state
     type: string
-    priority: 10
-  subresources:
-    status: {}
   validation:
     openAPIV3Schema:
       properties:
@@ -42,10 +38,15 @@ spec:
               type: string
             text:
               type: string
+            state:
+              type: string
+              enum:
+              - New
+              - Sent
         status:
           type: object
           properties:
+            errorCount:
+              type: integer
             observedGeneration:
               type: integer
-            url:
-              type: string
