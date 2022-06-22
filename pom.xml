@@ -18,7 +18,7 @@
         <kubernetes-client.version>7.0.0</kubernetes-client.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <fabric8.version>4.7.0</fabric8.version>
+        <fabric8.version>4.7.2</fabric8.version>
         <strimzi.version>0.16.0</strimzi.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
